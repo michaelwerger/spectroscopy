@@ -1,0 +1,104 @@
+{
+    "ALPAQL": {
+        "fullname": "alpha_aquilae",
+        "ra.hms": "297d41m44.9783s",
+        "dec.dms": "8d52m05.9563s",
+        "frame": "icrs"
+    },
+    "GAMCAS": {
+        "fullname": "gamma_cassiopeiae",
+        "ra.hms": "14d10m37.9755s",
+        "dec.dms": "60d43m00.265s",
+        "frame": "icrs"
+    },
+    "DELCEP": {
+        "fullname": "delta_cephei",
+        "ra.hms": "337d17m33.9753s",
+        "dec.dms": "58d24m54.7139s",
+        "frame": "icrs"
+    },
+    "ALPCMI": {
+        "fullname": "alpha_canis_majoris",
+        "ra.hms": "101d17m13.7592s",
+        "dec.dms": "-16d42m58.0171s",
+        "frame": "icrs"
+    },
+    "PCYG": {
+        "fullname": "P_cygni",
+        "ra.hms": "304d26m48.0313s",
+        "dec.dms": "38d01m58.5527s",
+        "frame": "icrs"
+    },
+    "ALPLYR": {
+        "fullname": "alpha_lyrae",
+        "ra.hms": "279d14m05.0452s",
+        "dec.dms": "38d47m01.2802s",
+        "frame": "icrs"
+    },
+    "ALPORI": {
+        "fullname": "alpha_orionis",
+        "ra.hms": "88d47m34.5804s",
+        "dec.dms": "7d24m25.4304s",
+        "frame": "icrs"
+    },
+    "BETORI": {
+        "fullname": "beta_orionis",
+        "ra.hms": "78d38m04.0814s",
+        "dec.dms": "-8d12m05.8981s",
+        "frame": "icrs"
+    },
+    "GAMORI": {
+        "fullname": "gamma_orionis",
+        "ra.hms": "81d16m57.9488s",
+        "dec.dms": "6d20m58.9318s",
+        "frame": "icrs"
+    },
+    "DELORI": {
+        "fullname": "delta_orionis",
+        "ra.hms": "83d00m06.0014s",
+        "dec.dms": "-0d17m56.7424s",
+        "frame": "icrs"
+    },
+    "EPSORI": {
+        "fullname": "epsilon_orionis",
+        "ra.hms": "84d03m12.2002s",
+        "dec.dms": "-1d12m06.9089s",
+        "frame": "icrs"
+    },
+    "ZETORI": {
+        "fullname": "zeta_orionis",
+        "ra.hms": "85d11m22.8999s",
+        "dec.dms": "-1d56m33.2649s",
+        "frame": "icrs"
+    },
+    "KAPORI": {
+        "fullname": "kappa_orionis",
+        "ra.hms": "86d56m20.8326s",
+        "dec.dms": "-9d40m10.5777s",
+        "frame": "icrs"
+    },
+    "GAMUMA": {
+        "fullname": "gamma_ursae_majoris",
+        "ra.hms": "178d27m27.7097s",
+        "dec.dms": "53d41m41.135s",
+        "frame": "icrs"
+    },
+    "M31": {
+        "fullname": "M31",
+        "ra.hms": "10d41m04.9499s",
+        "dec.dms": "41d16m07.5s",
+        "frame": "icrs"
+    },
+    "M42": {
+        "fullname": "M42",
+        "ra.hms": "83d49m19.488s",
+        "dec.dms": "-5d23m27.996s",
+        "frame": "icrs"
+    },
+    "VENUS": {
+        "fullname": "M42",
+        "ra.hms": "83d49m19.488s",
+        "dec.dms": "-5d23m27.996s",
+        "frame": "icrs"
+    }
+}

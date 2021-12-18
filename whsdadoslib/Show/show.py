@@ -7,7 +7,13 @@ import os
 import platform
 import math
 from scipy.interpolate import interp1d
-from whsdadoslib.data import DataProcessing
+from astropy.table import Table
+from data import DataProcessing
+from figuresize import FigureSize
+from linetable import Linetable
+from ccdparameters import CCDParameters
+from calibration import CalibrationData
+from . import find_nearest_index
 
 
 class Show(object):
@@ -24,7 +30,6 @@ class Show(object):
             Show.figure_height = figure_height
     
     @staticmethod
-
     def plots(icl,factors = None, xlim=None, ylim=None):
 
         if xlim is None:
@@ -33,7 +38,7 @@ class Show(object):
             ylim = [0, -1]
         if factors is None:
             factors = np.ones(len(datafiles))
-        plt.rcParams['figure.figsize'] = [Show.figure_width, Show.figure_height]
+        plt.rcParams['figure.figsize'] = FigureSize.NARROW
         fig, ax = plt.subplots()
         for hdu, factor in zip(icl.hdus(),factors):
             traced = hdu.data[ylim[0]:ylim[1],:].sum(axis=0)
@@ -44,7 +49,7 @@ class Show(object):
     @staticmethod
     def images(icl, xlim=[0,4655], ylim=[0,3519], max_n=9999):
         n = 0
-        plt.rcParams['figure.figsize'] = [Show.figure_width, Show.figure_height]
+        plt.rcParams['figure.figsize'] = FigureSize.NARROW
         for hdu in icl.hdus():
             fig, ax = plt.subplots()
             plt.imshow(hdu.data[ylim[0]:ylim[1],xlim[0]:xlim[1]],vmin=500,vmax=1000)
@@ -56,7 +61,7 @@ class Show(object):
     @staticmethod
     def selected_images(icl, peaks=None, delta=None, vmin=0, vmax=1000):
         center_row = (peaks[2] + peaks[3])/2
-        plt.rcParams['figure.figsize'] = [Show.figure_width, Show.figure_height]
+        plt.rcParams['figure.figsize'] = FigureSize.NARROW
         for f,hdu in zip(icl.summary['file'], icl.hdus()):
             traced = np.fliplr(hdu.data).sum(axis=1)
             max_intensity = max(traced)
@@ -70,7 +75,7 @@ class Show(object):
     @staticmethod
     def selected_plots(icl, peaks=None, delta=None, vmin=0, vmax=1000):
         center_row = (peaks[2] + peaks[3])/2
-        plt.rcParams['figure.figsize'] = [Show.figure_width, Show.figure_height]
+        plt.rcParams['figure.figsize'] = FigureSize.NARROW
         for f,hdu in zip(icl.summary['file'], icl.hdus()):
             traced = np.fliplr(hdu.data).sum(axis=1)
             max_intensity = max(traced)
@@ -91,11 +96,30 @@ class Show(object):
                 right_inset_ax.set_yticks([])
                 plt.show()
 
+    @staticmethod
+    def along_slit(icl, slit_positions=None):
+        dark = CalibrationData.get_dark()
+        for f,hdu in zip(icl.summary['file'], icl.hdus()): # over all images in catalog
+    
+            plt.rcParams['figure.figsize'] = FigureSize.THIN
+            fig, ax = plt.subplots()
+            if CalibrationData.flip == True:
+                _data = np.flip(hdu.data, axis=1)
+            else:
+                _data = hdu.data
+            if CalibrationData.dark is None:
+                print (os.getcwd())
+                raise ValueError('dark is missing')
+            data = _data - np.ones((CCDParameters.ysize,CCDParameters.xsize))*dark
+            plt.plot(data.sum(axis=1))
+            for sp in slit_positions:
+                plt.plot([sp,sp],[0,200000])
 
+            plt.show() 
     @staticmethod
     def full_columns(icl):
         
-        plt.rcParams['figure.figsize'] = [Show.figure_width, Show.figure_height]
+        plt.rcParams['figure.figsize'] = FigureSize.NARROW
 
         fig, ax = plt.subplots()
         for hdu in icl.hdus():
@@ -112,7 +136,7 @@ class Show(object):
     @staticmethod
     def selected_columns(icl, column_no=3600, xlim=[2000,3500], ylim=[0,100000], max_i_limit=90000):
 
-        plt.rcParams['figure.figsize'] = [Show.figure_width, Show.figure_height]
+        plt.rcParams['figure.figsize'] = FigureSize.NARROW
         colors = mcd.CSS4_COLORS
         color_names = list(colors.keys())
         n = 0  # sequence number of measurement
@@ -148,7 +172,7 @@ class Show(object):
     @staticmethod
     def selected_rows(icl, column_no=3600, xlim=[2000,3500], ylim=[0,100000], max_i_limit=90000):
 
-        plt.rcParams['figure.figsize'] = [Show.figure_width, Show.figure_height]
+        plt.rcParams['figure.figsize'] = FigureSize.NARROW
         colors = mcd.CSS4_COLORS
         color_names = list(colors.keys())
         n = 0  # sequence number of measurement
@@ -184,7 +208,7 @@ class Show(object):
     @staticmethod
     def average_along_columns(twod_array):
 
-        plt.rcParams['figure.figsize'] = [Show.figure_width, Show.figure_height]
+        plt.rcParams['figure.figsize'] = FigureSize.NARROW
         fig, ax = plt.subplots()
         traced = twod_array.sum(axis=0)
         plt.plot(traced/twod_array.shape[0])
@@ -196,7 +220,7 @@ class Show(object):
     def show_traces(icl, peaks=None, column=2800, ylim=[0,1000], max_n=9999):
         n = 0
         for hdu in icl.hdus():
-            plt.rcParams['figure.figsize'] = [Show.figure_width, Show.figure_height]
+            plt.rcParams['figure.figsize'] = FigureSize.NARROW
             fig, ax = plt.subplots()
             plt.plot(hdu.data[:,column])
             if peaks is not None:
@@ -251,7 +275,7 @@ class Show(object):
         ext_std = interp1d(wavelengths, extcoeffs, fill_value="extrapolate")
         i_std = ext_std(waves)
 
-        plt.rcParams['figure.figsize'] = [Show.figure_width, Show.figure_height]
+        plt.rcParams['figure.figsize'] = FigureSize.NARROW
         fig, ax = plt.subplots()
 
         plt.plot(waves,i_std)
@@ -261,38 +285,49 @@ class Show(object):
         plt.show()
         
     @staticmethod
-    def show_standard_flux(hst_waves,hst_fluxes):
-        plt.rcParams['figure.figsize'] = [Show.figure_width, Show.figure_height]
+    def show_standard_flux(ref_waves,ref_fluxes):
+        
+        f_std = interp1d(ref_waves,ref_fluxes)
+        plt.rcParams['figure.figsize'] = FigureSize.NARROW
         fig, ax = plt.subplots()
+        plt.plot(ref_waves, f_std(ref_waves))
 
-        waves = range(3000,10000)
-        plt.plot(hst_waves, hst_fluxes, '-')
-        plt.plot(hst_waves, hst_fluxes, '.', color='red')
-        f_vega = interp1d(hst_waves, hst_fluxes, fill_value="extrapolate")
-        plt.plot(waves, f_vega(waves))
-        plt.xlim(3000,10000)
-        #plt.ylim(0,max(f_vega(waves)))
-        #plt.plot(waves,summed*40000)
-        plt.xlabel('wavelength (A)')
-        plt.ylabel('flux (mJansky)')
-
-
-        fig, ax = plt.subplots()
-
-        #plt.plot(hst_waves, hst_fluxes)
-        f_vega = interp1d(hst_waves, hst_fluxes, fill_value="extrapolate")
-        f_vega_mjansky = f_vega(waves)
-        f_watt = f_vega_mjansky
-
-        for i in range(0,len(f_watt)):
-            f_watt[i] = f_vega_mjansky[i]/waves[i]/waves[i]
-
-        plt.plot(waves,f_watt)
-        plt.xlim(3000,10000)
-        plt.ylim(0,max(f_watt))
-        #plt.plot(waves,summed*40000)
-        plt.xlabel('wavelength (A)')
-        plt.ylabel('flux (W)')
         plt.show()
 
-plt.show()   
+    @staticmethod
+    def plot_table(f, xlimits=[3500, 8000], colname=None, ylim=[0,1]):
+
+        t = Table.read(f)
+        plt.rcParams['figure.figsize'] = FigureSize.NARROW
+        fig, ax = plt.subplots()
+
+        w =  t.as_array(True,'WAVELENGTH')
+        _waves = [float(_w[0]) for _w in w]
+        indices = np.bitwise_and(np.array(w,dtype=np.int64) > xlimits[0], np.array(w, dtype=np.int64) < xlimits[1])
+        
+        linetable = Linetable()
+        plt.xlim(xlimits[0], xlimits[1])
+
+        d = t.as_array(True,colname)
+        selected_values = d[indices].astype(float)
+        values = d.astype(float)
+        max_value  = np.amax(selected_values, axis=0)
+        print (max_value)
+        
+        plt.plot(w,[v/max_value for v in values])
+        plt.ylim(ylim)
+
+        for label in linetable.get_lines():
+            wavelength = linetable.get_wavelength(label)
+            
+            if xlimits[0] < wavelength and wavelength < xlimits[1]:
+                plt.text(wavelength,0.01,label,rotation=90, color='red',size=7.0,  horizontalalignment = 'center')
+                ix = find_nearest_index(_waves, float(wavelength))
+                
+                
+                plt.plot([wavelength, wavelength], [0.1, values[ix]*0.9/max_value], color='red')
+                
+        plt.title(f)
+        plt.show()
+
+ 
