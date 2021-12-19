@@ -5,7 +5,7 @@ from astropy.coordinates import SkyCoord, EarthLocation, AltAz
 import numpy as np
 import math
 import sys
-sys.path.append('/Users/Micha/Workspaces/python/spectroscopy/whsdadoslib')
+#sys.path.append('/Users/Micha/Workspaces/python/spectroscopy/whsdadoslib')
 
 class Report(object):
     

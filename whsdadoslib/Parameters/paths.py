@@ -29,7 +29,7 @@ class Paths(object):
     @staticmethod
     def write():
 
-        d = {
+        paths = {
             'src_path': Paths.src_path,
             'fits_path': Paths.fits_path,
             'corr_path': Paths.corr_path,
@@ -41,15 +41,15 @@ class Paths(object):
 
         if Paths.overwrite == True:
             with ('Paths.json','w') as f:
-                json.dump(d,f)
+                json.dump(paths,f)
 
     @staticmethod
     def _read():
         with ('Paths.json','r') as f:
-            d = json.load(f)
-        Paths.src_path = d['src_path']
-        Paths.fits_path = d['fits_path']
-        Paths.corr_path = d['corr_path']
-        Paths.tab_path = d['tab_path']
-        Paths.products_path = d['products_path']
-        Paths.fits_path = d['fits_path']
+            paths = json.load(f)
+        Paths.src_path = paths['src_path']
+        Paths.fits_path = paths['fits_path']
+        Paths.corr_path = paths['corr_path']
+        Paths.tab_path = paths['tab_path']
+        Paths.products_path = paths['products_path']
+        Paths.fits_path = paths['fits_path']
