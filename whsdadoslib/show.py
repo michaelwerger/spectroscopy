@@ -9,12 +9,11 @@ import math
 from scipy.interpolate import interp1d
 from astropy.table import Table
 
-from ..Calibration.wavelength import WavelengthCalibration
-from ..Parameters.figuresize import FigureSize
-from ..Parameters.ccdparameters import CCDParameters
-from ..Parameters.linetable import Linetable
+from .Calibration.wavelength import WavelengthCalibration
+from .parameters import FigureSize, CCDParameters
+from .linetable import Linetable
 
-from .. import find_nearest_index
+from . import find_nearest_index
 
 
 class Show(object):

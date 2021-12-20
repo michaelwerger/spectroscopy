@@ -1,7 +1,85 @@
 import json
 import os
 import shutil
-from astropy.coordinates import SkyCoord
+import astropy.units as u
+from astropy.coordinates import SkyCoord, EarthLocation
+from .paths import Paths
+
+class CCDParameters():
+    xsize = 4656
+    ysize = 3520
+
+class FigureSize():
+    THIN     = [24, 3]
+    NARROW   = [24, 8]
+    MEDIUM   = [24, 15]
+    LARGE    = [24, 24]
+
+class Observatory(object):
+
+    fname = 'observatory.json'
+
+    def __init__(self,name):
+
+
+        with open(os.path.join(Paths.json_path,Observatory.fname),"r") as f:
+            self.name = name
+            self.records = json.load(f)        
+
+    def get_earth_location(self):
+        return EarthLocation(
+            lat=self.records[self.name]['earth_location']['latitude']*u.deg,
+            lon=self.records[self.name]['earth_location']['longitude']*u.deg,
+            height=self.records[self.name]['earth_location']['height']*u.m
+           
+        )
+
+    def get_name(self):
+        return self.records[self.name]['name']
+
+    def get_utc_offset(self):
+        return 1*u.hour
+
+    def dict(self):
+
+        return {
+            'name':self.records[self.name]['name'],
+            'earth_location': EarthLocation(
+                lat=self.records[self.name]['earth_location']['latitude']*u.deg, 
+                lon=self.records[self.name]['earth_location']['longitude']*u.deg, 
+                height=self.records[self.name]['earth_location']['height']*u.m),
+            'utc_offset':1*u.hour
+        }
+    
+    def __str__(self):
+        
+        if self.records[self.name]['earth_location']['latitude'] > 0:
+            northsouth = 'N'
+        else:
+            northsouth = 'S'
+
+        if self.records[self.name]['earth_location']['longitude'] > 0:
+            eastwest = 'E'
+        else:
+            eastwest = 'W'
+        s = '{:s} @ {:f} {:s} {:f} {:s} '.format(
+            self.records[self.name]['name'],
+            self.records[self.name]['earth_location']['latitude'],
+            northsouth,
+            self.records[self.name]['earth_location']['longitude'],
+            eastwest
+            )
+        return s
+
+class Parameters(object):
+
+     slit_rows = []
+     lower_pixel = 0
+     upper_pixel = 0
+     detection_level =0.0
+     flip = False
+     dark = None # either float or 2d array
+     processed = True # if true, instrument calibration is determined already
 
 class Targets(object):
 
@@ -111,6 +189,13 @@ def main():
     targets.read()
     print (targets.targets)    
 
+    whs = Observatory()
+
+    print (whs)
+    print (whs.get_earth_location())
+    print (whs.dict())
+
 if __name__ == "__main__":
     
     main()      
+

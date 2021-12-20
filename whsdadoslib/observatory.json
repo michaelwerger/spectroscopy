@@ -1,0 +1,23 @@
+{
+    "whs": {
+        "_comment": "# derived via https://www.google.de/maps/place/51°23'37.4%22N+6°58'43.0%22E/@51.3927894,6.9783578,138a,35y,39.46t/data=!3m1!1e3!4m13!1m6!3m5!1s0x47b8c35e2c65526f:0xe6c329dadcd6346a!2sSternwarte+Walter+Hohmann!8m2!3d51.3943807!4d6.978807!3m5!1s0x0:0x0!7e2!8m2!3d51.393716!4d6.9786111",
+        "name": "WHS",
+        "earth_location": {
+            "latitude"  : 51.393716,
+            "longitude" : 6.978611,
+            "height"    : 120.0,
+            "utc_offset": 1.0   
+        },
+        "measurements": {    
+            "observer": ["Spectrum team", "-"],
+            "instrume": ["DADOS+ASI1600MMPro","-"],
+            "telescop": ["30cm Newton","-"],
+            "grating":  ["200lin/mm 25mu mid","-"],
+            "observat": ["Walter-Hohmann-Obs","-"],
+            "focallen": ["3000.","'Telescope focal length in mm "],
+            "aptarea":  ["28260000","Aperture mm^2 - central obstruction"],
+            "aptdia":   ["300.", "Aperture diameter in mm"]
+        }
+    
+    }
+}

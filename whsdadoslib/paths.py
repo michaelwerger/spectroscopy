@@ -7,6 +7,7 @@ class Paths(object):
     fits_path = '' # directory with FITS data
     src_path = '' # directory with src files
     product_path = '' # directory for product files
+    json_path = '/Users/Micha/Workspaces/python/spectroscopy/whsdadoslib'
     overwrite = False # ensure to set to True if paths are overwritten
     
     # directory with extinction data

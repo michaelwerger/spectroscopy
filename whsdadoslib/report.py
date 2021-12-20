@@ -52,7 +52,7 @@ class Report(object):
         for f,hdu in zip(icl.summary['file'], icl.hdus()): # over all images in catalog
             obstime = hdu.header['DATE-OBS']
             alt_az = AltAz(obstime=obstime, 
-                location = observatory['WHS']['earth_location'])
+                location = observatory.get_earth_location())
             targets[target_name]['altaz'] = targets[target_name]['radec'].transform_to(alt_az)
             
             tokens = f.split('_')
