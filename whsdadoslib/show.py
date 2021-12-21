@@ -86,6 +86,31 @@ class Show(object):
         plt.show()
 
     @staticmethod
+    def images(icl, xlim=[0,4655], ylim=[0,3519], parameters=None, ccdparameters=None):
+
+
+        for f,hdu in zip(icl.summary['file'], icl.hdus()): # over all images in catalog
+            
+            #img = np.fliplr(hdu.data)
+            
+            plt.rcParams['figure.figsize'] = FigureSize.THIN
+            fig, ax = plt.subplots()
+            if parameters.flip == True:
+                _data = np.flip(hdu.data, axis=1)
+            else:
+                _data = hdu.data
+            data = _data - np.ones((ccdparameters.ysize,ccdparameters.xsize))*parameters.dark
+            img = ax.imshow(data, vmin=parameters.vmin, vmax=parameters.vmax) 
+            fig.colorbar(img)
+            plt.title(f)
+            plt.xlabel('cols')
+            plt.ylabel('rows')
+            plt.ylim(parameters.slit_positions[2], parameters.slit_positions[3])
+                
+            plt.show()
+
+
+    @staticmethod
     def plot_table(f, xlimits=[3500, 8000], colname=None, ylim=[0,1]):
 
         t = Table.read(f)
@@ -303,19 +328,7 @@ class Show(object):
         plt.xlim(xlim[0], xlim[1])
         plt.show()
 
-    @staticmethod
-    def show_images(icl, xlim=[0,4655], ylim=[0,3519], max_n=9999):
-        n = 0
-        plt.rcParams['figure.figsize'] = FigureSize.NARROW
-        for hdu in icl.hdus():
-            fig, ax = plt.subplots()
-            plt.imshow(hdu.data[ylim[0]:ylim[1],xlim[0]:xlim[1]],vmin=500,vmax=1000)
-            plt.show()
-            n += 1
-            if n > max_n:
-                break
-
-
+    
     @staticmethod
     def show_standard_flux(ref_waves,ref_fluxes):
         
@@ -325,6 +338,43 @@ class Show(object):
         plt.plot(ref_waves, f_std(ref_waves))
 
         plt.show()
+
+    @staticmethod
+    def sky_areas(icl, xlim=[0,4655], ylim=[0,3519], sky_width=50, parameters=None, ccdparameters=None):
+
+
+        
+        for f,hdu in zip(icl.summary['file'], icl.hdus()): # over all images in catalog
+            
+            #img = np.fliplr(hdu.data)
+            
+            plt.rcParams['figure.figsize'] = FigureSize.THIN
+            fig, ax = plt.subplots()
+            if parameters.flip == True:
+                _data = np.flip(hdu.data, axis=1)
+            else:
+                _data = hdu.data
+            data = _data - np.ones((ccdparameters.ysize,ccdparameters.xsize))*parameters.dark
+            img = ax.imshow(data, vmin=parameters.vmin, vmax=parameters.vmax) 
+            fig.colorbar(img)
+            plt.title(f)
+            plt.xlabel('cols')
+            plt.ylabel('rows')
+
+            plt.plot([xlim[0],xlim[1]],[parameters.slit_positions[2],parameters.slit_positions[2]], color='red')
+            plt.plot([xlim[0],xlim[1]],[parameters.slit_positions[2]+sky_width,parameters.slit_positions[2]+sky_width], color='red')
+            plt.plot([xlim[0],xlim[0]],[parameters.slit_positions[2],parameters.slit_positions[2]+sky_width], color='red')
+            plt.plot([xlim[1],xlim[1]],[parameters.slit_positions[2],parameters.slit_positions[2]+sky_width], color='red')
+
+            plt.plot([xlim[0],xlim[1]],[parameters.slit_positions[3],parameters.slit_positions[3]], color='green')
+            plt.plot([xlim[0],xlim[1]],[parameters.slit_positions[3]-sky_width,parameters.slit_positions[3]-sky_width], color='green')
+            plt.plot([xlim[0],xlim[0]],[parameters.slit_positions[3],parameters.slit_positions[3]-sky_width], color='green')
+            plt.plot([xlim[1],xlim[1]],[parameters.slit_positions[3],parameters.slit_positions[3]-sky_width], color='green')
+
+
+            plt.ylim(parameters.slit_positions[2], parameters.slit_positions[3])
+                
+            plt.show()
 
     @staticmethod
     def show_traces(icl, peaks=None, column=2800, ylim=[0,1000], max_n=9999):

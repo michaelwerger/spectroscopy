@@ -80,6 +80,7 @@ class Parameters(object):
      flip = False
      dark = None # either float or 2d array
      processed = True # if true, instrument calibration is determined already
+     vmin, vmax = 0, 100
 
 class Targets(object):
 
