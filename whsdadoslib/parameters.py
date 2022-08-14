@@ -6,8 +6,16 @@ from astropy.coordinates import SkyCoord, EarthLocation
 from .paths import Paths
 
 class CCDParameters():
-    xsize = 4656
-    ysize = 3520
+    #xsize = 4656
+    #ysize = 3520
+    xsize = 4944
+    ysize = 3284
+
+    @staticmethod
+    def __init__(xsize=4656, ysize=3520):
+        CCDParameters.xsize = xsize
+        CCDParameters.ysize = ysize
+
 
 class FigureSize():
     THIN     = [24, 3]
@@ -77,6 +85,9 @@ class Parameters(object):
      lower_pixel = 0
      upper_pixel = 0
      detection_level =0.0
+     detection_windowsize = 19
+     detection_order = 4
+     detection_distance = 8
      flip = False
      dark = None # either float or 2d array
      processed = True # if true, instrument calibration is determined already

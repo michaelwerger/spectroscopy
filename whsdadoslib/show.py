@@ -8,6 +8,13 @@ import platform
 import math
 from scipy.interpolate import interp1d
 from astropy.table import Table
+import colour
+from colour_demosaicing import (
+    EXAMPLES_RESOURCES_DIRECTORY,
+    demosaicing_CFA_Bayer_bilinear,
+    demosaicing_CFA_Bayer_Malvar2004,
+    demosaicing_CFA_Bayer_Menon2007,
+    mosaicing_CFA_Bayer)
 
 from .Calibration.wavelength import WavelengthCalibration
 from .parameters import FigureSize, CCDParameters
@@ -20,41 +27,73 @@ class Show(object):
 
     figure_width = 15
     figure_height = 12
-    xsize = 4656
-    ysize = 3520
+    #xsize = 4656
+    #ysize = 3520
+    xsize = 4944
+    ysize = 3284
     
-    def __init__(self, figure_width=None, figure_height=None):
+    @staticmethod
+    def __init__(self, figure_width=None, figure_height=None, xsize=4656, ysize=3520):  # xsize = 4944, ysize= 3284
         if figure_width:
             Show.figure_width = figure_width
         if figure_height:
             Show.figure_height = figure_height
+
+        Show.xsize = xsize
+        Show.ysize = ysize
+
+        
     
 
     @staticmethod
-    def along_slit(icl, slit_positions=None, dark=None, flip=None):
+    def along_slit(icl, slit_positions=None, dark=None, flip=None, rgb=None):  ### replaced by ShowImages.slits()
         if dark is None:
             dark = 1.0
         if flip is None:
             flip = False
-        for f,hdu in zip(icl.summary['file'], icl.hdus()): # over all images in catalog
-    
-            plt.rcParams['figure.figsize'] = FigureSize.THIN
-            fig, ax = plt.subplots()
-            if flip == True:
-                _data = np.flip(hdu.data, axis=1)
-            else:
-                _data = hdu.data
-            
-            data = _data - np.ones((CCDParameters.ysize,CCDParameters.xsize))*dark
-            summed_data = data.sum(axis=1)
-            max_value  = np.amax(summed_data, axis=0)
-            normlized_data = summed_data / max_value
+        if rgb:
+            for f,hdu in zip(icl.summary['file'], icl.hdus()): # over all images in catalog
 
-            plt.plot(normlized_data)
-            for sp in slit_positions:
-                plt.plot([sp,sp],[0,0.2])
+                plt.rcParams['figure.figsize'] = FigureSize.THIN
+                fig, ax = plt.subplots()
+                if flip == True:
+                    _data = np.flip(hdu.data, axis=1)
+                else:
+                    _data = hdu.data
+                
+                data = _data - np.ones((CCDParameters.ysize,CCDParameters.xsize))*dark
+                greydata = demosaicing_CFA_Bayer_bilinear(data,'RGGB')
+                plotcolor = ['red','green','blue']
+                for channel in [0,1,2]:
+                    summed_data = greydata[:,:,channel].sum(axis=1)
+                    max_value  = np.amax(summed_data, axis=0)
+                    normlized_data = summed_data / max_value
 
-            plt.show() 
+                    plt.plot(normlized_data, colour=plotcolor[channel])
+                    for sp in slit_positions:
+                        plt.plot([sp,sp],[0,0.2])
+
+                plt.show() 
+        else:
+            for f,hdu in zip(icl.summary['file'], icl.hdus()): # over all images in catalog
+
+                plt.rcParams['figure.figsize'] = FigureSize.THIN
+                fig, ax = plt.subplots()
+                if flip == True:
+                    _data = np.flip(hdu.data, axis=1)
+                else:
+                    _data = hdu.data
+                
+                data = _data - np.ones((CCDParameters.ysize,CCDParameters.xsize))*dark
+                summed_data = data.sum(axis=1)
+                max_value  = np.amax(summed_data, axis=0)
+                normlized_data = summed_data / max_value
+
+                plt.plot(normlized_data)
+                for sp in slit_positions:
+                    plt.plot([sp,sp],[0,0.2])
+
+                plt.show() 
 
 
     @staticmethod
@@ -86,7 +125,7 @@ class Show(object):
         plt.show()
 
     @staticmethod
-    def images(icl, xlim=[0,4655], ylim=[0,3519], parameters=None, ccdparameters=None):
+    def images(icl, xlim=[0,4655], ylim=[0,3519], parameters=None, ccdparameters=None):  # replacded by ShowImages.images()
 
 
         for f,hdu in zip(icl.summary['file'], icl.hdus()): # over all images in catalog
@@ -105,13 +144,19 @@ class Show(object):
             plt.title(f)
             plt.xlabel('cols')
             plt.ylabel('rows')
-            plt.ylim(parameters.slit_positions[2], parameters.slit_positions[3])
+            plt.ylim(ylim)
+            plt.xlim(xlim)
                 
             plt.show()
 
 
     @staticmethod
     def plot_table(f, xlimits=[3500, 8000], colname=None, ylim=[0,1]):
+        '''
+        models_dir = os.path.join('/Users','Micha','Workspaces','Kurucz','data','archive.stsci.edu','hlsps','reference-atlases','cdbs','grid','ck04models')
+        model_file  = os.path.join(models_dir,'ckp00','ckp00_19000.fits')
+        Show.plot_table(model_file, colname='g40', ylim=[0,1e9])
+        '''
 
         t = Table.read(f)
         plt.rcParams['figure.figsize'] = FigureSize.NARROW
@@ -133,17 +178,15 @@ class Show(object):
         plt.plot(w,[v/max_value for v in values])
         plt.ylim(ylim)
 
-        for label in linetable.get_lines():
-            wavelength = linetable.get_wavelength(label)
-            
+        linetable = Linetable()
+        for label, wavelength in zip(linetable.get_lines(), linetable.get_wavelengths()):
             if xlimits[0] < wavelength and wavelength < xlimits[1]:
-                plt.text(wavelength,0.01,label,rotation=90, color='red',size=7.0,  horizontalalignment = 'center')
                 ix = find_nearest_index(_waves, float(wavelength))
-                
-                
+                plt.text(wavelength,0.01,label,rotation=90, color='red',size=7.0,  horizontalalignment = 'center')
                 plt.plot([wavelength, wavelength], [0.1, values[ix]*0.9/max_value], color='red')
-                
-        plt.title(f)
+
+        _title = "%s[%s]" % (f.replace('.fits',''),colname)
+        plt.title(_title)
         plt.show()
 
     @staticmethod
@@ -394,7 +437,8 @@ class Show(object):
 
 
     @staticmethod
-    def wavelength_check(trace, wavelengths_file='wavelengths.txt'):
+    def wavelength_check(trace, wavelengths_file='wavelengths.txt'):  ### replaced by class ShowWavelengthCheck.plot():
+
         plt.rcParams['figure.figsize'] = FigureSize.NARROW
 
         fig, ax = plt.subplots()
@@ -436,3 +480,29 @@ class Show(object):
         plt.xlabel('wavelengths (A)')
         plt.ylabel('measured counts')
         plt.show()
+
+class CCDImage(Show):
+
+    def __init__(self, figure_width=None, figure_height=None):
+        super().__init__(figure_width, figure_height)
+
+    @staticmethod
+    def show(icl, xlim=[0,4655], ylim=[0,3519], parameters=None, ccdparameters=None):
+        Show.images(icl, xlim, ylim, parameters, ccdparameters)
+
+    @staticmethod
+    def slits(icl, slit_positions=None, dark=None, flip=None, rgb=None):
+        if slit_positions:
+            Show.along_slit(icl, slit_positions, dark, flip, rgb)  # replaced by ShowImages.slits()
+        else:
+            Show.images(icl)
+
+
+class WavelengthCheck(Show):
+
+    def __init__(self, figure_width=None, figure_height=None):
+        super().__init__(figure_width, figure_height)
+
+    @staticmethod
+    def plot(trace, wavelengths_file='wavelength.txt'):
+        super().wavelength_check(trace, wavelengths_file)

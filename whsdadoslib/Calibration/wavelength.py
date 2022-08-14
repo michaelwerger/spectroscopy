@@ -5,6 +5,7 @@ import sys
 import os
 import platform
 from scipy.interpolate import interp1d
+from math import sqrt
 
 class WavelengthCalibration(object):
     
@@ -40,5 +41,16 @@ class WavelengthCalibration(object):
             waves = [pos*pos* z[0] + pos * z[1] + z[2] for pos in positions]
         else:
             raise NotImplementedError
-
+        
         return waves
+
+    @staticmethod
+    def get_inverse(waves):
+
+        z = WavelengthCalibration.get_z()
+
+
+        x1 = [-z[1]/2/z[0] + sqrt(w/z[0] + z[1]*z[1]/4/z[0]/z[0] - z[2]/z[0]) for w in waves ]
+        x2 = [-z[1]/2/z[0] - sqrt(w/z[0] + z[1]*z[1]/4/z[0]/z[0] - z[2]/z[0]) for w in waves ]
+
+        return x1, x2

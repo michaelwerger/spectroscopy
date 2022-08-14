@@ -1,46 +1,80 @@
-H-alpha,        6562.793
-H-beta,         4861.327
-H-gamma,        4340.466
-H-delta,        4101.738
-H-epsilon,      3970.075
-H-zeta,         3888.052
-H-eta,          3835.387
-H-theta,        3797.909
-H m=3 n=4,      18745.0
-H m=3 n=5,      12814.0
-H m=3 n=6,      10935.0
-H m=3 n=7,      10046.0
-H m=3 n=8,      9543.0
-H m=3 n=9,      9226.0
-H m=3 n=10,     9012.0
-H m=3 n=11,     8860.0
-H m=3 n=12,     8748.0
-H m=3 n=13,     8662.0								
-He I,           4026
-He I,           4471
-He I,           4387
-He I            4026
-He I,           3889
-Tellur. (O2),   6969
-Tellur. (O2),   6276.6
-Tellur. (H2O),  7151.5
-Tellur. (O2),   7605
-O II,           4649
-OH,             4076
-CH,             4300
-Ca I,           4226
-Ca I,           4454
-Ca-II (K),      3933
-Ca-II (H),      3968
-Na-II,          5865.924
-Mg,             3970
-Mg?,            5135
-Fe I,           4050
-Fe,             4045
-Fe,             4065
-Fe, Co?,        4317
-Fe I,           4383
-Fe?,            5233
-Sr II,          4077
-TiO,            4762
-TiO,            4954
+Line;Wavelength (A);Symbol;Source
+H m=3 n=4;18745.0;;
+H m=3 n=5;12814.0;;
+H m=3 n=6;10935.0;;
+H m=3 n=7;10046.0;;
+H m=3 n=8;9543.0;;
+H m=3 n=9;9226.0;;
+H m=3 n=10;9012.0;;
+Tellur. (O2);8986.65;y;https://de.wikipedia.org/wiki/Fraunhoferlinie
+H m=3 n=11;8860.0;;
+TiO;8859;;https://aas.aanda.org/articles/aas/full/1999/12/ds1672/node3.html
+H m=3 n=12;8748.0;;
+H m=3 n=13;8662.0;;
+TiO;8432;;https://aas.aanda.org/articles/aas/full/1999/12/ds1672/node3.html
+Tellur. (O2);8226.96;Z;https://de.wikipedia.org/wiki/Fraunhoferlinie
+Tellur. (O2);7605;;
+Tellur. (O2);7593.70;A;https://de.wikipedia.org/wiki/Fraunhoferlinie
+TiO;7589;;https://aas.aanda.org/articles/aas/full/1999/12/ds1672/node3.html
+Tellur. (H2O);7151.5;;
+TiO;7054;;https://aas.aanda.org/articles/aas/full/1999/12/ds1672/node3.html
+Tellur. (O2);6969;;
+Tellur. (O2);6867.19;B;https://de.wikipedia.org/wiki/Fraunhoferlinie
+H-alpha;6562.781;C;https://de.wikipedia.org/wiki/Fraunhoferlinie
+Fe I;6430;;
+TiO;6300;;http://www.sternwarte-habichtswald.de/astromania/galerie/Spektren/Alp-Tau-Aldebaran-grafik.jpg
+Tellur. (O2);6276.61;;https://de.wikipedia.org/wiki/Fraunhoferlinie
+TiO;5920;;http://www.sternwarte-habichtswald.de/astromania/galerie/Spektren/Alp-Tau-Aldebaran-grafik.jpg
+Na-II;5895.940;D1;https://de.wikipedia.org/wiki/Fraunhoferlinie
+Na-II;5889.97;D2;https://de.wikipedia.org/wiki/Fraunhoferlinie
+He;5875.620;D3;https://de.wikipedia.org/wiki/Fraunhoferlinie
+Hg;5460.73;e;https://de.wikipedia.org/wiki/Fraunhoferlinie
+Fe I;5270.39;E2;https://de.wikipedia.org/wiki/Fraunhoferlinie
+Fe?;5233;;
+Fe I;5202;;
+Mg I;5200;;http://www.sternwarte-habichtswald.de/astromania/galerie/Spektren/Alp-Tau-Aldebaran-grafik.jpg
+Mg;5183.62;b1;https://de.wikipedia.org/wiki/Fraunhoferlinie
+Mg;5172.7;b2;https://de.wikipedia.org/wiki/Fraunhoferlinie
+Fe II;5168.91;b3;https://de.wikipedia.org/wiki/Fraunhoferlinie
+Fe I;5167.51;b4;https://de.wikipedia.org/wiki/Fraunhoferlinie
+Mg;5167.33;b4;https://de.wikipedia.org/wiki/Fraunhoferlinie
+Mg I;5135;;
+Fe II;5018;;
+Fe I;5012;;
+Fe;4957.61;c;https://de.wikipedia.org/wiki/Fraunhoferlinie
+TiO;4954;;
+Fe II;4923;;
+H-beta;4861.327;F;https://de.wikipedia.org/wiki/Fraunhoferlinie
+TiO;4762;;
+Fe;4668.14;d;https://de.wikipedia.org/wiki/Fraunhoferlinie
+O II;4649;;
+He I;4471;;
+Ca I;4454;;
+He I;4387;;
+Fe I;4383.55;e;https://de.wikipedia.org/wiki/Fraunhoferlinie
+H-gamma;4340.466;G’;https://de.wikipedia.org/wiki/Fraunhoferlinie
+Fe I;4325;;
+Fe ?;4317;;
+Fe I;4307.9;G;https://de.wikipedia.org/wiki/Fraunhoferlinie
+Ca;4307.74;G;https://de.wikipedia.org/wiki/Fraunhoferlinie
+CH;4300;;
+Fe I;4271;;
+Ca I;4226;;
+H-delta;4101.738;h;https://de.wikipedia.org/wiki/Fraunhoferlinie
+Sr II;4077;;
+OH;4076;;
+Fe I;4071;;
+Fe I;4063;;
+Fe I;4050;;
+Fe I;4045;;
+He I;4026;;
+He I           ;4026;;
+H-epsilon;3970.075;;
+Mg I;3970;;
+Ca-II (H);3968.47;H;https://de.wikipedia.org/wiki/Fraunhoferlinie
+Ca-II (K);3933.68;K;https://de.wikipedia.org/wiki/Fraunhoferlinie
+He I;3889;;
+H-zeta;3888.052;;
+H-eta;3835.387;;
+Fe;3820.440;L;https://de.wikipedia.org/wiki/Fraunhoferlinie
+H-theta;3797.909;;
