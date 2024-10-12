@@ -28,4 +28,4 @@ processing_object.ipynb allows processing of object measurement
 - apply instrument response
 - apply athmospheric extinction
 
-(C) 2020 Dr. Michael Werger
+(C) 2020-2024 Dr. Michael Werger
